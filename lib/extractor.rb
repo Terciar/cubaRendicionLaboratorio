@@ -99,6 +99,7 @@ class Extractor
           paciente.store("dni", "#{paciente_dni}")
           # -- Nro. Beneficiacio: 10 digitos
           paciente_nro_beneficiario = linea[27..37].strip.to_i
+          #puts "\e[0;34m\e[47m\ NROBeneficiario: #{paciente_nro_beneficiario} \e[m"
           paciente.store("nro_beneficiario", "#{paciente_nro_beneficiario}")
           # -- Apellido y nombre: arranca en 42 hasta 85
           paciente_full_mame = linea[41..83].strip!
@@ -396,7 +397,7 @@ class Extractor
           linea << "#{@periodo}".rjust(6, '0') #PeriodoFacturado
           linea << "00000014" #ProfesionalAsiste= 00000014 (8chr)
           linea << "001" #IdFuncion = 1 (1chr)
-          linea << paciente["nro_beneficiario"].rjust(15, '0').to_s # !!! IDconsulta = 000005352012297 (15chr)
+          linea << paciente["nro_beneficiario"].ljust(15, ' ').to_s # !!! IDconsulta = 000005352012297 (15chr) #El cliente pidio que se modifique por espacios en blanco poteriores.
           linea << paciente["dni"].rjust(8, '0').to_s # ! DniAfiliado = 06745788 (8chr)
           linea << paciente["full_mame"].ljust(60, ' ').to_s #! ApellidoNombre = Pepe Argento (60chr) - completar con blancos
           linea << "1" #TipoServicio= 1 (1chr)
