@@ -11,6 +11,7 @@ Toda contribución (sugerencias de cambio), consejo, critica constructiva, consu
   - Para el deploy, el servicio de hosting: **Heroku**
 
 **Nostas**.
+  - Instalar cuba: gem install cuba
   - Para hacer correr la aplicación: rackup config.ru
   - y luego ingresar a: http://0.0.0.0:9292
   - Tiene que tener una carpeta "tmp", que es lo que usa en el servidor de producción.

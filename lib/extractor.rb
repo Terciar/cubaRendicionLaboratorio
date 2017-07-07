@@ -90,7 +90,7 @@ class Extractor
     lineas.each_with_index do |linea, index|
       #linea.encode!('UTF-8', :undef => :replace, :invalid => :replace, :replace => "") #Me hace perder las ñ
       linea.encode!('UTF-8', 'WINDOWS-1252', :invalid => :replace, :replace => "")
-      if linea.match(/0\s\s-0/) 
+      if linea.match(/0\s\s-\d/) 
           paciente = Hash.new
           # - Paciente inicia en: "0\s\s-03""
           paciente.store("inicia", index)
@@ -128,12 +128,12 @@ class Extractor
             #puts "vs. #{paciente_dni}"
             repetido = true if item['dni'].to_i == paciente_dni.to_i
          end
-          #puts "arra: #{project_array}"
+          #puts "\e[0;34m\e[47m\ Aparecio el Huevo: #{paciente} \e[m"
           @pacientes << paciente unless repetido
        end
 
        ##Para evitar el error cuando ponen un espacio de menos.
-       if linea.match(/0\s-0/) 
+       if linea.match(/0\s-\d/) 
           paciente = Hash.new
           paciente.store("inicia", index)
           paciente_dni = linea[17..25].strip.to_i
@@ -168,6 +168,7 @@ class Extractor
        end
 
     end
+    
     #puts @pacientes
     #puts "\e[0;34m\e[47m\ TODOS los Pacientes: #{@pacientes.count} \e[m"
   end
@@ -179,10 +180,10 @@ class Extractor
 
         lineas.each_with_index do |linea, index|
           linea.encode!('UTF-8', :undef => :replace, :invalid => :replace, :replace => "")
-          if linea.match(/0\s\s-0/)
+          if linea.match(/0\s\s-\d/)
             paciente_actual = linea[19..26].strip.to_i #DNI paciente
             #puts "\e[0;34m\e[47m\ Cambio paciente. #{paciente_actual} \e[m"
-          elsif linea.match(/0\s-0/)
+          elsif linea.match(/0\s-\d/)
             paciente_actual = linea[18..25].strip.to_i #DNI paciente
             #puts "\e[0;34m\e[47m\ Aparecio!! paciente. #{paciente_actual} \e[m"
           end
@@ -382,11 +383,12 @@ class Extractor
   # Feriado = N (1chr)
   # Urgencias = N (1chr)
   # - Regla de Negocio: En caso de que no se tenga información para completar algún campo y sea String se completara con espacios vacíos o S y N según corresponda y si fuera numérico con ceros.
-
+      
       lineas = []
       @pacientes.each do |paciente|
       #{"inicia"=>14, "dni"=>"40047880", "nro_beneficiario"=>"0000092594 ", "full_mame"=>"ACOSTA AUGUSTO", "origin"=>" 0 ", "nro_paciente"=>" 785288", "ficha"=>"\n"}  
         servicios_cliente = servicios_paciente(paciente["dni"])
+        #puts "\e[0;34m\e[47m\ servicios_cliente: #{servicios_cliente} \e[m" 
         servicios_cliente.each do |servicio_prestado|
         #{"paciente"=>"38716191", "fecha"=>"04/03/2015", "nomenclador"=>"1", "nombre_analisis"=>"ACTO BIOQUIMICO", "cantidad"=>"1", "precio_unitario"=>"31.0", "subtotal"=>"31.0"} 
           next if servicio_prestado["nombre_analisis"].upcase == "ETIQUETA" #salta este servicio que no se factura
@@ -416,7 +418,8 @@ class Extractor
           linea << "N"# Urgencias = N (1chr)
           linea << "\r\n"
           lineas << linea
-          
+            
+            #puts "\e[0;34m\e[47m\ @linea: #{linea} \e[m" 
           #Esto es para mostrar un total en la vista, para que puedan comparar rapidamente si salio bien el calculo.
           subtotal = servicio_prestado["subtotal"].to_f
           #puts "\e[0;34m\e[47m\ subtotal: #{subtotal} y #{servicio_prestado["subtotal"]} \e[m"
