@@ -92,7 +92,7 @@ class Extractor
       linea.encode!('UTF-8', 'WINDOWS-1252', :invalid => :replace, :replace => "")
       if linea.match(/0\s\s-\d/) 
           paciente = Hash.new
-          # - Paciente inicia en: "0\s\s-03""
+          # - Paciente inicia en: "0\s\s-3""
           paciente.store("inicia", index)
           # -- DNI: inicia en caracter 20 al 27.
           paciente_dni = linea[18..26].strip.to_i
@@ -103,7 +103,7 @@ class Extractor
           paciente.store("nro_beneficiario", "#{paciente_nro_beneficiario}")
           # -- Apellido y nombre: arranca en 42 hasta 85
           paciente_full_mame = linea[41..83].strip!
-          paciente.store("full_mame", "#{linea[41..83]}")
+          paciente.store("full_mame", "#{linea[41..83]}").strip!
           #puts "\e[0;34m\e[47m\ Paciente _full: #{paciente_full_mame} \e[m"
           #puts "\e[0;34m\e[47m\ Paciente repetido: #{paciente["full_mame"]} \e[m"
           # -- Origen: 86 al 88
@@ -141,7 +141,7 @@ class Extractor
           paciente_nro_beneficiario = linea[26..37].strip.to_i
           paciente.store("nro_beneficiario", "#{paciente_nro_beneficiario}")
           paciente_full_mame = linea[40..82].strip!
-          paciente.store("full_mame", "#{linea[40..82]}")
+          paciente.store("full_mame", "#{linea[40..82]}").strip!
           paciente_origin = linea[83..85]
           paciente.store("origin", "#{paciente_origin}")
           paciente_nro_paciente = linea[86..92]
@@ -208,6 +208,7 @@ class Extractor
             # -- blanco: 90..106
             # -- PRECIO UNITARIO: 107..115 - Formato: 9.999,99
             precio_unitario = linea[105..115]
+            #puts "\e[0;34m\e[47m\ precio capturado_unitario: #{precio_unitario} \e[m"
             if precio_unitario
               precio_unitario.strip! 
               precio_unitario = string_number_decimal_host(precio_unitario)
@@ -226,7 +227,11 @@ class Extractor
             #puts "Linea Servicios Pa: #{servicios}"
             #Ajuste Precio Unitario: el informe trae mal calculado el precio unitario. Aveces le pone el valor del subtotal de la linea.
             servicios["precio_unitario"] = servicios["subtotal"].to_f / servicios["cantidad"].to_i
+            servicios["precio_unitario"] = '%.2f' % servicios["precio_unitario"]
+            #puts "Pi is: #{'%.2f' % servicios["precio_unitario"]}"
             #puts "Precio unitario: #{servicios["precio_unitario"]}"
+            #puts "Subtotal servicios: #{servicios["subtotal"].to_f}"
+            #puts "cantidad: #{servicios["cantidad"].to_i}"
             @servicios << servicios
           end
         end
