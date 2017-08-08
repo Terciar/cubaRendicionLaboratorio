@@ -18,7 +18,7 @@ Toda contribución (sugerencias de cambio), consejo, critica constructiva, consu
 
 **Servicios Externos.**
 -----------------------
-[![Build Status](https://travis-ci.org/matiasmasca/cubaRendicionLaboratorio.svg)](https://travis-ci.org/matiasmasca/cubaRendicionLaboratorio)
+[![Build Status](https://travis-ci.org/Terciar/cubaRendicionLaboratorio.svg?branch=master)](https://travis-ci.org/Terciar/cubaRendicionLaboratorio)
 
 Licencia:
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](http://opensource.org/licenses/MIT)
