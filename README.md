@@ -27,7 +27,7 @@ Licencia:
 ===========
 
 * Ruby version:
-    ruby 2.2
+    ruby 2.2.2
 
 * Cuba version:
     cuba 3.4.0
