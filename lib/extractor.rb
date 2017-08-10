@@ -269,7 +269,7 @@ class Extractor
         linea << servicio_prestado["nomenclador"].rjust(6, '0').to_s
         linea << servicio_prestado["nombre_analisis"].upcase
         linea << servicio_prestado["cantidad"].to_i
-        linea << servicio_prestado["precio_unitario"]
+        linea << servicio_prestado["precio_unitario"].to_f
         linea << servicio_prestado["subtotal"]
         lineas << linea
         #puts "\e[0;34m\e[47m\ linea: #{servicio_prestado["precio_unitario"]} \e[m"
@@ -340,14 +340,14 @@ class Extractor
     lineas.each do |linea|
       #puts "Linea Excel: #{linea}
       #worksheet.write_row("A#{i}", linea, format_row) #Linea entera.
-      worksheet.write("A#{i}", linea[0], format_row)
-      worksheet.write("B#{i}", linea[1], format_number)
+      worksheet.write("A#{i}", linea[0], format_row) # Tipo de Documento
+      worksheet.write("B#{i}", linea[1], format_number) #Nro de DNI
       worksheet.write("C#{i}", linea[2], format_row)
       worksheet.write("D#{i}", linea[3], format_row)
       worksheet.write("E#{i}", linea[4] , format_number)
       worksheet.write("F#{i}", linea[5] , format_row)
       worksheet.write("G#{i}", linea[6] , format_number)
-      worksheet.write("H#{i}", linea[7] , format_currency)
+      worksheet.write("H#{i}", linea[7] , format_currency) #Precio unitario
       worksheet.write("I#{i}", "=G#{i}*H#{i}", format_currency)
       i += 1
     end
